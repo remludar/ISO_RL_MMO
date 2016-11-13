@@ -1,0 +1,28 @@
+﻿Next Steps
+-----------
+[] Create basic terrain and debug camera
+	= Terrain
+		- Pretty fucking big, will need culling.
+		- Flat grass
+	= Camera
+		- Basic full camera controls (keyboard options also)
+
+
+
+General Plan
+1. Generate a persistant world map.
+	= Camera 3rd Person Isometric Perspective.
+		- Zoom and Y-Rotation allowed.
+		- Should adjust "forward" to adjust to rotation. (W is always forward)
+		- Option for transparency halo to deal with 3rd person iso style object occlusion.
+		- Not sure what to do about Y level camera stuff yet...
+			* Maybe allow a special top-down camera mode to toggle?
+			* Maybe heavily restrict min/max Y levels?
+	= Graphic Style High Res / Cartoon Blend
+		- Basic Landscape will just be a plane of height-mapped triangles.
+			* Not sure how you do biomes and transitions
+			* Not sure best way to store this data for the map
+		- Prototype will be 100% primitives and shaders
+		- Any actual artwork will be all polish after prototype.
+		- Lots and lots and lots of shader work.
+2. Generate semi-random quest level maps with themes.
