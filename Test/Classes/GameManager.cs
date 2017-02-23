@@ -4,9 +4,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ISO_RL_MM.Classes
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class GameManager : Game
     {
         GraphicsDeviceManager graphics;
@@ -63,17 +60,9 @@ namespace ISO_RL_MM.Classes
 
         protected override void Draw(GameTime gameTime)
         {
-            CameraManager.Draw(TerrainManager.GetBasicEffect());
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            GraphicsDevice.SetVertexBuffer(TerrainManager.GetVertexBuffer());
-            GraphicsDevice.Indices = TerrainManager.GetIndexBuffer();
 
-            foreach (var pass in TerrainManager.GetBasicEffect().CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                var triCount = ((World.WIDTH - 1) * (World.DEPTH - 1)) * 2;
-                GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, triCount);
-            }
+            TerrainManager.Draw(GraphicsDevice);
 
             base.Draw(gameTime);
         }

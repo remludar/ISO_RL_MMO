@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,19 +44,21 @@ namespace ISO_RL_MM.Classes
             return _heightMap;
         }
 
-        public static VertexBuffer GetVertexBuffer()
+        public static void Draw(GraphicsDevice graphicsDevice)
         {
-            return _vertexBuffer;
-        }
+            _basicEffect.Projection = CameraManager.GetProjectionMatrix();
+            _basicEffect.View = CameraManager.GetViewMatrix();
+            _basicEffect.World = CameraManager.GetWorldMatrix();
+            
+            graphicsDevice.SetVertexBuffer(_vertexBuffer);
+            graphicsDevice.Indices = _indexBuffer;
 
-        public static IndexBuffer GetIndexBuffer()
-        {
-            return _indexBuffer;
-        }
-
-        public static BasicEffect GetBasicEffect()
-        {
-            return _basicEffect;
+            foreach (var pass in _basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                var triCount = ((World.WIDTH - 1) * (World.DEPTH - 1)) * 2;
+                graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, triCount);
+            }
         }
 
         private static void _GenerateHeightMap()
@@ -70,5 +73,6 @@ namespace ISO_RL_MM.Classes
                 }
             }
         }
+
     }
 }

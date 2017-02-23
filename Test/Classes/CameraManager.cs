@@ -17,15 +17,16 @@ namespace ISO_RL_MM.Classes
         private static Camera3D _debugCamera;
         private static Camera3D _gameCamera;
         private static Camera3D _activeCamera;
-        //private static float _rotationAmount = 0;
-        //private static float _pitchAmount = 0;
         private static Dictionary<TYPE, Camera3D> _cameraDictionary = new Dictionary<TYPE, Camera3D>();
+        private static VertexBuffer _vertexBuffer;
+        private static IndexBuffer _indexBuffer;
+        private static BasicEffect _basicEffect;
 
         public static void Init()
         {
             //Debug Camera
             var position = new Vector3(((float)World.WIDTH / 2f) / 2f, 1, -20f);
-            var moveSpeed = 30.0f;
+            var moveSpeed = 100.0f;
             var rotateSpeed = 10f;
             _debugCamera = new Camera3D(position, Vector3.Forward,  Vector3.Up, moveSpeed, rotateSpeed, true);
 
@@ -51,13 +52,36 @@ namespace ISO_RL_MM.Classes
             {
                 kvp.Value.Update(deltaTime);
             }
+
+            //Build vertex buffer here for drawing camera shapes.
         }
 
-        public static void Draw(BasicEffect basicEffect)
+        public static Matrix GetProjectionMatrix()
         {
-            basicEffect.Projection = _activeCamera.ProjectionMatrix;
-            basicEffect.View = _activeCamera.ViewMatrix;
-            basicEffect.World = _activeCamera.WorldMatrix;
+            return _activeCamera.ProjectionMatrix;
+        }
+
+        public static Matrix GetViewMatrix()
+        {
+            return _activeCamera.ViewMatrix;
+        }
+
+        public static Matrix GetWorldMatrix()
+        {
+            return _activeCamera.WorldMatrix;
+        }
+
+        public static void Draw(GraphicsDevice graphicsDevice)
+        {
+            graphicsDevice.SetVertexBuffer(_vertexBuffer);
+            graphicsDevice.Indices = _indexBuffer;
+
+            foreach (var pass in _basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                var triCount = ((World.WIDTH - 1) * (World.DEPTH - 1)) * 2;
+                graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, triCount);
+            }
         }
 
         private static void _HandleInput(float deltaTime)
